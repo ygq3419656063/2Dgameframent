@@ -3,6 +3,7 @@ import pygame
 import os
 import threading
 import time
+
 class PersonState(Enum):
     quiet=auto()
     left=auto()
@@ -24,6 +25,7 @@ class Animator(threading.Thread):
         self.running = True
         self.currentFrame = 0
         self.fps=10
+        npc.animatorFrame=self.quiet[0]
     def run(self):
         while self.running:
             if self.state!=self.oldstate:

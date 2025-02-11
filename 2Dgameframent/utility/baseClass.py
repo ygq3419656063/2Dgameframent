@@ -5,6 +5,7 @@ import threading
 from .animator import PersonState
 import time
 import pickle
+from .role import  Role
 
 class SetParameter:
     windowsWidth=900
@@ -25,6 +26,9 @@ class Game:
     player=None
     mouseLocation=None
     taskbar=None
+    npc=None
+    width=SetParameter.windowsWidth//SetParameter.cellSize
+    height=SetParameter.windowsHeight//SetParameter.cellSize
     @classmethod
     def save(cls):
         with open(f'historyfile//player.pkl',"wb") as file:
@@ -65,19 +69,23 @@ class Cell:
         self.x=x
         self.y=y
         self.cellcontainer=None
+        self.NPC=None
 
 class Board:
     def __init__(self):
         self.rect=pygame.Rect(0,0,SetParameter.windowsWidth,SetParameter.windowsHeight)
 
         self.cellList=[[None for j in range(SetParameter.windowsWidth//SetParameter.cellSize)] for i in range(SetParameter.windowsHeight//SetParameter.cellSize)]
+        self.rects=[]
     def init(self):
         for i in range(SetParameter.windowsHeight//SetParameter.cellSize):
             for j in range(SetParameter.windowsWidth//SetParameter.cellSize):
                 cell=Cell(i,j)
                 self.cellList[i][j]=cell
-    def is_hover(self):
 
+
+
+    def is_hover(self):
         x=Game.mouseLocation.normalScalex
         y=Game.mouseLocation.normalScaley
         hoverSurface = pygame.Surface((SetParameter.cellSize, SetParameter.cellSize), pygame.SRCALPHA)
@@ -109,12 +117,24 @@ class ImageLayer:
         bg = pygame.transform.scale(bg, (SetParameter.windowsWidth, SetParameter.windowsHeight))
         bgrect = pygame.Rect((0, 0), (SetParameter.windowsWidth, SetParameter.windowsHeight))
         Game.screen.blit(bg,bgrect)
-        Game.board.draw()
-        for image in self.Images:
-            Game.screen.blit(image[0],(image[1][0],image[1][1]))
+        #Game.board.draw()
+        for i in range(Game.height):
+            for j in range(Game.width):
+                cell=Game.board.cellList[i][j]
+                if cell.cellcontainer!=None:
+                    Game.screen.blit(cell.cellcontainer.image,(j*SetParameter.cellSize,i*SetParameter.cellSize))
+                if cell.NPC!=None:
+                    if cell.NPC.animatorFrame!=None:
+                        Game.screen.blit(cell.NPC.animatorFrame,cell.NPC.rect)
+
+
+        #for image in self.Images:
+            #Game.screen.blit(image[0],(image[1][0]*SetParameter.cellSize,image[1][1]*SetParameter.cellSize))
         Game.taskbar.draw()
-        if Game.player.animatorFrame!=None:
-            Game.screen.blit(Game.player.animatorFrame,Game.player.rect)
+        #if Game.player.animatorFrame!=None:
+            #Game.screen.blit(Game.player.animatorFrame,Game.player.rect)
+        #if Game.npc!=None and Game.npc.animatorFrame!=None:
+            #Game.screen.blit(Game.npc.animatorFrame,Game.npc.rect)
 
 class Gameobject:
     def __init__(self,file):
@@ -148,12 +168,16 @@ class Player(threading.Thread):
         super().__init__()
         self.handThing=None
         self.animatorFrame=None
-        self.rect=pygame.Rect(0,0,30,60)
+        self.rect=pygame.Rect(0,0,30,30)
         self.animator=None
         self.running=True
+        self.role=Role.player
+
 
     def run(self):
         while self.running:
+            oldCellIndex=(self.rect.x//SetParameter.cellSize,self.rect.y//SetParameter.cellSize)
+            oldRect=pygame.Rect(self.rect)
             if Game.player.animator.state==PersonState.right:
                 self.rect.x+=5
             elif Game.player.animator.state==PersonState.left:
@@ -162,10 +186,31 @@ class Player(threading.Thread):
                 self.rect.y-=5
             elif Game.player.animator.state==PersonState.down:
                 self.rect.y+=5
+            newCellIndex=(self.rect.x//SetParameter.cellSize,self.rect.y//SetParameter.cellSize)
+            cell=Game.board.cellList[newCellIndex[1]][newCellIndex[0]]
+            if self.rect.collidelist(Game.board.rects)==-1:
+                if oldCellIndex!=newCellIndex:
+                    cell.NPC=self
+                    Game.board.cellList[oldCellIndex[1]][oldCellIndex[0]].NPC = None
+            else:
+                self.rect = pygame.Rect(oldRect)
             time.sleep(0.1)
 
     def stop(self):
         self.running=False
+
+class NPC:
+    def __init__(self,role):
+        self.rect=pygame.Rect(150,150,30,30)
+        self.cell = (self.rect.x // SetParameter.cellSize,
+                     self.rect.y // SetParameter.cellSize )
+        self.role=role
+        Game.board.cellList[self.cell[1]][self.cell[0]].NPC=self
+        self.animator=None
+        self.animatorFrame = None
+        Game.board.rects.append(self.rect)
+
+
 
 
 
