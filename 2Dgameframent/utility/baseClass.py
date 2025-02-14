@@ -6,17 +6,7 @@ from .animator import PersonState
 import time
 import pickle
 from .role import  Role
-
-class SetParameter:
-    windowsWidth=900
-    windowsHeight=600
-    colorBlack=(0,0,0)
-    colorWhite=(255,255,255)
-    colorRed=(255,0,0)
-    cellSize=30
-
-
-
+from .set_parameter import SetParameter
 
 class Game:
     board=None
@@ -27,6 +17,7 @@ class Game:
     mouseLocation=None
     taskbar=None
     npc=None
+    npcs={}
     width=SetParameter.windowsWidth//SetParameter.cellSize
     height=SetParameter.windowsHeight//SetParameter.cellSize
     @classmethod
@@ -35,6 +26,8 @@ class Game:
             pickle.dump(cls.player.rect,file)
         with open(f'historyfile//boardCellList.pkl',"wb") as file:
             pickle.dump(cls.board.cellList,file)
+        with open(f'historyfile//bgElements.pkl',"wb") as file:
+            pickle.dump(cls.imageLayer.bgImages,file)
 
     @classmethod
     def load(cls):
@@ -42,7 +35,8 @@ class Game:
             cls.player.rect=pickle.load(file)
         with open(f"historyfile//boardCellList.pkl","rb") as file:
             cls.board.cellList=pickle.load(file)
-
+        with open(f'historyfile//bgElements.pkl',"rb") as file:
+            cls.imageLayer.bgImages=pickle.load(file)
 
 
     @classmethod
@@ -70,6 +64,21 @@ class Cell:
         self.y=y
         self.cellcontainer=None
         self.NPC=None
+        self.npcRole=None
+    def __getstate__(self):
+        if self.NPC !=None:
+            self.npcRole = self.NPC.role
+        state = self.__dict__.copy()
+        if self.NPC!=None:
+            del state["NPC"]
+
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        if self.npcRole!=None:
+            self.NPC=Game.npcs[self.npcRole]
+
 
 class Board:
     def __init__(self):
@@ -112,12 +121,16 @@ class Board:
 class ImageLayer:
     def __init__(self):
         self.Images=[]
+        self.bgImages=[]
+        self.dragElement=None
     def draw(self):
         bg=pygame.image.load(f'picture//background.webp')
         bg = pygame.transform.scale(bg, (SetParameter.windowsWidth, SetParameter.windowsHeight))
         bgrect = pygame.Rect((0, 0), (SetParameter.windowsWidth, SetParameter.windowsHeight))
         Game.screen.blit(bg,bgrect)
-        #Game.board.draw()
+        for bgElement in self.bgImages:
+            bgElement.draw()
+
         for i in range(Game.height):
             for j in range(Game.width):
                 cell=Game.board.cellList[i][j]
