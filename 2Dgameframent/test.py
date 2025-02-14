@@ -31,7 +31,7 @@ if __name__=="__main__":
     dragging=False
     offset_x=0
     offset_y=0
-    scale=1
+
     while running:
 
         Game.imageLayer.draw()
@@ -45,12 +45,12 @@ if __name__=="__main__":
                     Game.mouseRightHit()
                 if event.button==1:
                     for bgElement in Game.imageLayer.bgImages:
-                        if bgElement.rect.collidepoint(event.pos):
+                        if bgElement.scaleRect.collidepoint(event.pos):
                             dragging=True
                             Game.imageLayer.dragElement=bgElement
                             mouse_x,mouse_y=event.pos
-                            offset_x=bgElement.rect.x-mouse_x
-                            offset_y=bgElement.rect.y-mouse_y
+                            offset_x=bgElement.scaleRect.x-mouse_x
+                            offset_y=bgElement.scaleRect.y-mouse_y
                     if not dragging:
                         Game.mouseLeftHit()
             elif event.type==pygame.MOUSEBUTTONUP:
@@ -59,20 +59,20 @@ if __name__=="__main__":
             elif event.type==pygame.MOUSEWHEEL:
                 bgEle=None
                 for bgElement in Game.imageLayer.bgImages:
-                    if bgElement.rect.collidepoint(pygame.mouse.get_pos()):
+                    if bgElement.scaleRect.collidepoint(pygame.mouse.get_pos()):
                         bgEle=bgElement
                         break
                 if bgEle!=None:
-                    scale+=event.y*0.1
-                    scale=max(0.1,scale)
-                    bgEle.image=pygame.transform.scale(bgEle.image,(bgEle.rect.width*scale,bgEle.rect.height*scale))
+                    bgEle.scale+=event.y*0.1
+                    #scale=max(0.1,scale)
+                    #bgEle.image=pygame.transform.scale(bgEle.image,(bgEle.rect.width*scale,bgEle.rect.height*scale))
 
             elif event.type==pygame.MOUSEMOTION:
                 if dragging:
                     if Game.imageLayer.dragElement!=None:
                         mouse_x,mouse_y=event.pos
-                        Game.imageLayer.dragElement.rect.x=mouse_x+offset_x
-                        Game.imageLayer.dragElement.rect.y=mouse_y+offset_y
+                        Game.imageLayer.dragElement.scaleRect.x=mouse_x+offset_x
+                        Game.imageLayer.dragElement.scaleRect.y=mouse_y+offset_y
             elif event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_d:
                     for i in range(len(Game.board.cellList)):

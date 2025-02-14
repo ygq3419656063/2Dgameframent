@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3be18aa-79d8-46ba-8145-4ff821c296a3" name="Changes" comment="碰撞和层次渲染">
-      <change afterPath="$PROJECT_DIR$/utility/mapmaker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utility/set_parameter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/historyfile/boardCellList.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/historyfile/boardCellList.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/historyfile/player.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/historyfile/player.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smalltest.py" beforeDir="false" afterPath="$PROJECT_DIR$/smalltest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility/baseClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/baseClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utility/mapmaker.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/mapmaker.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +24,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
@@ -41,15 +42,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/gitrepository/2Dgameframent&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "test",
+    "last_opened_file_path": "E:/gitrepository/2Dgameframent",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2Dgameframent" />
@@ -106,7 +107,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="test" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
