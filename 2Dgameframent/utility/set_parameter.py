@@ -5,3 +5,5 @@ class SetParameter:
     colorWhite=(255,255,255)
     colorRed=(255,0,0)
     cellSize=30
+    globalWindowWidth=1200
+    globalWindowHeight=800

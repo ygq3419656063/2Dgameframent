@@ -111,6 +111,7 @@ if __name__=="__main__":
         clock.tick(60)
     Game.player.animator.stop()
     Game.npc.animator.stop()
+
     Game.player.stop()
 
     pygame.quit()

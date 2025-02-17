@@ -18,6 +18,9 @@ class Game:
     taskbar=None
     npc=None
     npcs={}
+    crop_x=0
+    crop_y=0
+    offset=[crop_x,crop_y]
     width=SetParameter.windowsWidth//SetParameter.cellSize
     height=SetParameter.windowsHeight//SetParameter.cellSize
     @classmethod
@@ -84,19 +87,19 @@ class Board:
     def __init__(self):
         self.rect=pygame.Rect(0,0,SetParameter.windowsWidth,SetParameter.windowsHeight)
 
-        self.cellList=[[None for j in range(SetParameter.windowsWidth//SetParameter.cellSize)] for i in range(SetParameter.windowsHeight//SetParameter.cellSize)]
+        self.cellList=[[None for j in range(SetParameter.globalWindowWidth//SetParameter.cellSize)] for i in range(SetParameter.globalWindowHeight//SetParameter.cellSize)]
         self.rects=[]
     def init(self):
-        for i in range(SetParameter.windowsHeight//SetParameter.cellSize):
-            for j in range(SetParameter.windowsWidth//SetParameter.cellSize):
+        for i in range(len(self.cellList)):
+            for j in range(len(self.cellList[0])):
                 cell=Cell(i,j)
                 self.cellList[i][j]=cell
 
 
 
     def is_hover(self):
-        x=Game.mouseLocation.normalScalex
-        y=Game.mouseLocation.normalScaley
+        x=Game.mouseLocation.globalNormalScalex-Game.crop_x
+        y=Game.mouseLocation.globalNormalScaley-Game.crop_y
         hoverSurface = pygame.Surface((SetParameter.cellSize, SetParameter.cellSize), pygame.SRCALPHA)
         hoverSurface.fill((255, 0, 0, 128))
         Game.screen.blit(hoverSurface,(x,y))
@@ -104,8 +107,8 @@ class Board:
     def is_hit(self):
         if Game.player.handThing!=None:
             cellobject=copy.deepcopy(Game.player.handThing)
-            x = Game.mouseLocation.normalx
-            y = Game.mouseLocation.normaly
+            x = Game.mouseLocation.globalNormalx
+            y = Game.mouseLocation.globalNormaly
             self.cellList[y][x].cellcontainer=cellobject
             #Game.imageLayer.Images.append((cellobject.image,(x*SetParameter.cellSize,y*SetParameter.cellSize)))
 
@@ -114,7 +117,7 @@ class Board:
             for x in range(len(self.cellList[0])):
                 if self.cellList[y][x]!=None:
                     if self.cellList[y][x].cellcontainer!=None:
-                        Game.screen.blit(self.cellList[y][x].cellcontainer.image,(x*SetParameter.cellSize,y*SetParameter.cellSize))
+                        Game.screen.blit(self.cellList[y][x].cellcontainer.image,(x*SetParameter.cellSize-Game.crop_x,y*SetParameter.cellSize-Game.crop_y))
 
 
 
@@ -124,10 +127,10 @@ class ImageLayer:
         self.bgImages=[]
         self.dragElement=None
     def draw(self):
-        bg=pygame.image.load(f'picture//background.webp')
-        bg = pygame.transform.scale(bg, (SetParameter.windowsWidth, SetParameter.windowsHeight))
-        bgrect = pygame.Rect((0, 0), (SetParameter.windowsWidth, SetParameter.windowsHeight))
-        Game.screen.blit(bg,bgrect)
+        bg=pygame.image.load(f'picture//bg.jpg')
+        #bg = pygame.transform.scale(bg, (SetParameter.windowsWidth, SetParameter.windowsHeight))
+        bgrect = pygame.Rect((Game.crop_x, Game.crop_y), (SetParameter.windowsWidth, SetParameter.windowsHeight))
+        Game.screen.blit(bg,(0,0),bgrect)
         for bgElement in self.bgImages:
             bgElement.draw()
 
@@ -135,10 +138,12 @@ class ImageLayer:
             for j in range(Game.width):
                 cell=Game.board.cellList[i][j]
                 if cell.cellcontainer!=None:
-                    Game.screen.blit(cell.cellcontainer.image,(j*SetParameter.cellSize,i*SetParameter.cellSize))
+                    Game.screen.blit(cell.cellcontainer.image,(j*SetParameter.cellSize-Game.crop_x,i*SetParameter.cellSize-Game.crop_y))
                 if cell.NPC!=None:
                     if cell.NPC.animatorFrame!=None:
-                        Game.screen.blit(cell.NPC.animatorFrame,cell.NPC.rect)
+                        Game.screen.blit(cell.NPC.animatorFrame,cell.NPC.relativeRect)
+
+
 
 
         #for image in self.Images:
@@ -181,10 +186,12 @@ class Player(threading.Thread):
         super().__init__()
         self.handThing=None
         self.animatorFrame=None
-        self.rect=pygame.Rect(0,0,30,30)
+        self.rect=pygame.Rect(300,300,30,30)
         self.animator=None
         self.running=True
         self.role=Role.player
+        self.relativeRect=pygame.Rect(180,180,30,30)
+
 
 
     def run(self):
@@ -209,19 +216,53 @@ class Player(threading.Thread):
                 self.rect = pygame.Rect(oldRect)
             time.sleep(0.1)
 
+            cropold_x=Game.crop_x
+            cropold_y=Game.crop_y
+            if Game.player.animator.state==PersonState.right:
+                Game.crop_x+=5
+            elif Game.player.animator.state==PersonState.left:
+                Game.crop_x-=5
+            elif Game.player.animator.state==PersonState.up:
+                Game.crop_y-=5
+            elif Game.player.animator.state==PersonState.down:
+                Game.crop_y+=5
+
+            if Game.crop_x<0 or Game.crop_x>(1200-900):
+                Game.crop_x=cropold_x
+            if Game.crop_y<0 or Game.crop_y>(800-600):
+                Game.crop_y=cropold_y
+
+            Game.offset=[Game.crop_x,Game.crop_y]
+
+            Game.npc.relativeRect.x=Game.npc.globalRect.x-Game.crop_x
+            Game.npc.relativeRect.y=Game.npc.globalRect.y-Game.crop_y
+            self.relativeRect.x=self.rect.x-Game.crop_x
+            self.relativeRect.y=self.rect.y-Game.crop_y
+
+
+
+
+
     def stop(self):
         self.running=False
 
 class NPC:
     def __init__(self,role):
-        self.rect=pygame.Rect(150,150,30,30)
-        self.cell = (self.rect.x // SetParameter.cellSize,
-                     self.rect.y // SetParameter.cellSize )
+        self.relativeRect=pygame.Rect(150,150,30,30)
+        self.globalRect=pygame.Rect(150,150,30,30)
+        self.cell = (self.globalRect.x // SetParameter.cellSize,
+                     self.globalRect.y // SetParameter.cellSize )
         self.role=role
         Game.board.cellList[self.cell[1]][self.cell[0]].NPC=self
         self.animator=None
         self.animatorFrame = None
-        Game.board.rects.append(self.rect)
+        Game.board.rects.append(self.globalRect)
+
+        self.running=True
+
+
+
+
 
 
 
@@ -283,6 +324,12 @@ class MouseLocation:
         self.normaly=0
         self.normalScalex=0
         self.normalScaley=0
+        self.globalx=0
+        self.globaly=0
+        self.globalNormalx=0
+        self.globalNormaly=0
+        self.globalNormalScalex=0
+        self.globalNormalScaley=0
 
 
 
@@ -298,6 +345,16 @@ class MouseLocation:
         self.normalScaley=y*SetParameter.cellSize
         self.x=mouse_pos[0]
         self.y=mouse_pos[1]
+
+        self.globalx=mouse_pos[0]+Game.crop_x
+        self.globaly=mouse_pos[1]+Game.crop_y
+        self.globalNormalx=self.globalx//SetParameter.cellSize
+        self.globalNormaly=self.globaly//SetParameter.cellSize
+        self.globalNormalScalex=self.globalNormalx*SetParameter.cellSize
+        self.globalNormalScaley=self.globalNormaly*SetParameter.cellSize
+
+
+
 
         if Game.taskbar.rect.collidepoint(mouse_pos):
             self.TaskBarLoction=True
