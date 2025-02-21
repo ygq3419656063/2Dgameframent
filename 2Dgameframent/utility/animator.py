@@ -20,6 +20,7 @@ class Animator(threading.Thread):
         self.down=[pygame.image.load(os.path.join(file3,i)) for i in os.listdir(file3)]
         self.left=[pygame.image.load(os.path.join(file4,i)) for i in os.listdir(file4)]
         self.right = [pygame.image.load(os.path.join(file5, i)) for i in os.listdir(file5)]
+
         self.state=PersonState.quiet
         self.oldstate=PersonState.quiet
         self.running = True

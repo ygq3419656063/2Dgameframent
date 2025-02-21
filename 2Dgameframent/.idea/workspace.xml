@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3be18aa-79d8-46ba-8145-4ff821c296a3" name="Changes" comment="稍微完善的地图编辑">
+    <list default="true" id="b3be18aa-79d8-46ba-8145-4ff821c296a3" name="Changes" comment="摄像头跟随">
+      <change afterPath="$PROJECT_DIR$/picture/background - 副本.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/picture/background.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/picture/bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utility/gameConsole.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utility/imageLayer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/person1.pkl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/picture/background.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smalltest.py" beforeDir="false" afterPath="$PROJECT_DIR$/smalltest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utility/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utility/animator.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/animator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utility/baseClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/baseClass.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utility/set_parameter.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/set_parameter.py" afterDir="false" />
     </list>
@@ -39,12 +45,16 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2se0tTRaCMerDNJIug1ELn47RBT" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
@@ -108,7 +118,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739515576726</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="摄像头跟随">
+      <option name="closed" value="true" />
+      <created>1739777964733</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1739777964733</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -135,9 +153,11 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="helloworld" />
     <MESSAGE value="碰撞和层次渲染" />
     <MESSAGE value="稍微完善的地图编辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="稍微完善的地图编辑" />
+    <MESSAGE value="摄像头跟随" />
+    <option name="LAST_COMMIT_MESSAGE" value="摄像头跟随" />
   </component>
 </project>

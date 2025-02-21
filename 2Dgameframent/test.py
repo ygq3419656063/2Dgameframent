@@ -1,42 +1,23 @@
-from utility.baseClass  import *
+from utility.baseClass  import Game
 from utility.animator import *
-from utility.role import *
 from utility.mapmaker import loadBgElement
 
 
 
+
 if __name__=="__main__":
-    Game.player=Player()
-    Game.board=Board()
-    Game.board.init()
-    Game.board.cellList[0][0].NPC=Game.player
-    Game.mouseLocation=MouseLocation()
-    Game.taskbar=TaskBar()
-    Game.screen=pygame.display.set_mode((SetParameter.windowsWidth,SetParameter.windowsHeight))
-    Game.imageLayer = ImageLayer()
-    abiAnimator=Animator(Game.player,f'picture//Abigail//quiet',f'picture//Abigail//up',f'picture//Abigail//down',f'picture//Abigail//left',f'picture//Abigail//right')
-    Game.player.animator=abiAnimator
-    abiAnimator.start()
-    Game.npc = NPC(Role.abi)
-    NpcAnimator=Animator(Game.npc,f'picture//Abigail//quiet',f'picture//Abigail//up',f'picture//Abigail//down',f'picture//Abigail//left',f'picture//Abigail//right')
-    Game.npc.animator=NpcAnimator
-    NpcAnimator.start()
-    Game.npcs[Role.player]=Game.player
-    Game.npcs[Role.abi]=Game.npc
-
-
-    Game.player.start()
+    Game.init()
+    offset_x=0
+    offset_y=0
     clock = pygame.time.Clock()
     running = True
     dragging=False
-    offset_x=0
-    offset_y=0
-
     while running:
-
-        Game.imageLayer.draw()
+        Game.draw()
         mouse_pos = pygame.mouse.get_pos()
         Game.mouseLocation.location(mouse_pos)
+        if Game.isConsoling==True:
+            Game.handleConsole()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -64,8 +45,6 @@ if __name__=="__main__":
                         break
                 if bgEle!=None:
                     bgEle.scale+=event.y*0.1
-                    #scale=max(0.1,scale)
-                    #bgEle.image=pygame.transform.scale(bgEle.image,(bgEle.rect.width*scale,bgEle.rect.height*scale))
 
             elif event.type==pygame.MOUSEMOTION:
                 if dragging:
@@ -87,6 +66,13 @@ if __name__=="__main__":
                     Game.player.animator.state=PersonState.up
                 elif event.key==pygame.K_DOWN:
                     Game.player.animator.state=PersonState.down
+                elif event.key==pygame.K_BACKSLASH:
+                    print("yes / is pressed")
+                    if Game.isConsoling==False:
+                        Game.startConsole()
+
+
+
                 elif event.key==pygame.K_k:
                     print("yes,k is pressed")
                     Game.save()
@@ -95,9 +81,6 @@ if __name__=="__main__":
                 elif event.key==pygame.K_o:
                     print("o is pressed")
                     loadBgElement()
-
-
-
 
             elif event.type==pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or \
@@ -109,10 +92,6 @@ if __name__=="__main__":
         Game.isHover()
         pygame.display.flip()
         clock.tick(60)
-    Game.player.animator.stop()
-    Game.npc.animator.stop()
-
-    Game.player.stop()
-
+    Game.stop()
     pygame.quit()
 
