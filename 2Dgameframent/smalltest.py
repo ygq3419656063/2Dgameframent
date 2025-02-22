@@ -1,134 +1,80 @@
-
-import sys
-import threading
-from queue import Queue
 import pygame
+from queue import  Queue
+from threading import Thread
+from utility.set_parameter import SetParameter
+import os
 
-command_queue = Queue()
-
-
-class GameConsole(threading.Thread):
-    def __init__(self,screen):
+class GameConsole(Thread):
+    def __init__(self,queue):
         super().__init__()
         self.running = True
-        self.screen=screen
+        self.queue=queue
+
 
     def run(self):
         while self.running:
             try:
                 cmd = input(">>> ")
-                command_queue.put(cmd)
-                self.handle_commands(self.screen)
+                self.queue.put(cmd)
             except EOFError:
                 break
 
     def stop(self):
         self.running = False
 
-    def handle_commands(self,screen):
-        while not command_queue.empty():
-            cmd = command_queue.get()
-            parts = cmd.strip().split()
-            if not parts:
-                continue
-
-            command = parts[0].lower()
-            args = parts[1:]
-
-            if command == "viewwindow":
-                if len(args) != 2:
-                    print("参数错误！用法：viewWindow [width] [height]")
-                    continue
-
-                try:
-                    new_width = int(args[0])
-                    new_height = int(args[1])
-                    if new_width < 100 or new_height < 100:
-                        print("尺寸不能小于100x100！")
-                        continue
-
-                    self.screen = pygame.display.set_mode(
-                        (new_width, new_height),
-                        pygame.RESIZABLE
-                    )
-                    print(f"窗口尺寸已调整为 {new_width}x{new_height}")
-                except ValueError:
-                    print("无效的尺寸参数！必须为整数")
-
-            elif command == "exit":
-                self.running = False
-            else:
-                print(f"未知命令：{command}")
 
 
 
+# 假设你的TXT文件路径是 'example.txt'
+file_path = 'dialogue//abi.txt'
+texts=[]
 
-class Game:
-    def __init__(self, width=800, height=600):
-        pygame.init()
-        self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-        pygame.display.set_caption("Game Console Demo")
-        self.clock = pygame.time.Clock()
-        self.running = True
-        self.bg_color = (30, 30, 30)
+# 检查文件是否存在
+if os.path.exists(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            #print(line.strip())  # 使用 strip() 去除每行末尾的换行符
+            texts.append(line.strip())
+else:
+    print(f"文件 {file_path} 不存在")
 
-        self.console = GameConsole(self.screen)
-        self.console.start()
+queue=Queue()
+pygame.init()
+screen=pygame.display.set_mode((SetParameter.windowsWidth, SetParameter.windowsHeight))
+clock = pygame.time.Clock()
+running = True
+gameConsole=GameConsole(queue)
+gameConsole.start()
+rgbR=255
+rgbG=255
+rgbB=208
+font=pygame.font.Font("font//msyhl.ttc",36)
+dialoguePtr=0
+dialogue=texts[dialoguePtr]
+text=font.render(f'{dialogue}',True,(0,0,0))
+profile=pygame.image.load(f'E://gitrepository//2Dgameframent//picture//Abigail//profile.jpg')
+while running:
+    while not queue.empty():
+        cmd = queue.get()
+        parts = cmd.strip().split()
+        rgbR=int(parts[0])
+        rgbG=int(parts[1])
+        rgbB=int(parts[2])
 
-    def handle_commands(self):
-        while not command_queue.empty():
-            cmd = command_queue.get()
-            parts = cmd.strip().split()
-            if not parts:
-                continue
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type==pygame.MOUSEBUTTONDOWN:
+            if event.button==3:
+                dialoguePtr+=1
+                dialogue = texts[dialoguePtr]
+                text = font.render(f'{dialogue}', True, (0, 0, 0))
 
-            command = parts[0].lower()
-            args = parts[1:]
-
-            if command == "viewwindow":
-                if len(args) != 2:
-                    print("参数错误！用法：viewWindow [width] [height]")
-                    continue
-
-                try:
-                    new_width = int(args[0])
-                    new_height = int(args[1])
-                    if new_width < 100 or new_height < 100:
-                        print("尺寸不能小于100x100！")
-                        continue
-
-                    self.screen = pygame.display.set_mode(
-                        (new_width, new_height),
-                        pygame.RESIZABLE
-                    )
-                    print(f"窗口尺寸已调整为 {new_width}x{new_height}")
-                except ValueError:
-                    print("无效的尺寸参数！必须为整数")
-
-            elif command == "exit":
-                self.running = False
-            else:
-                print(f"未知命令：{command}")
-    def run(self):
-        try:
-            while self.running:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        self.running = False
-
-                #self.handle_commands()
-
-                self.screen.fill(self.bg_color)
-                pygame.display.flip()
-                self.clock.tick(60)
-        finally:
-            # 确保资源清理
-            #self.console.stop()
-            pygame.quit()
-            sys.exit()
-
-
-if __name__ == "__main__":
-    game = Game()
-    game.run()
-
+    screen.fill((255,255,255))
+    pygame.draw.rect(screen,(rgbR,rgbG,rgbB),(0,SetParameter.windowsHeight-100,SetParameter.windowsWidth,100))
+    screen.blit(profile, (0, SetParameter.windowsHeight - 100, 100, 100))
+    screen.blit(text,(100,SetParameter.windowsHeight-50))
+    pygame.display.flip()
+    clock.tick(60)
+gameConsole.stop()
+pygame.quit()

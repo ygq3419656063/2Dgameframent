@@ -3,8 +3,6 @@ from utility.animator import *
 from utility.mapmaker import loadBgElement
 
 
-
-
 if __name__=="__main__":
     Game.init()
     offset_x=0
@@ -16,6 +14,7 @@ if __name__=="__main__":
         Game.draw()
         mouse_pos = pygame.mouse.get_pos()
         Game.mouseLocation.location(mouse_pos)
+        Game.update()
         if Game.isConsoling==True:
             Game.handleConsole()
         for event in pygame.event.get():
@@ -37,6 +36,8 @@ if __name__=="__main__":
             elif event.type==pygame.MOUSEBUTTONUP:
                     if event.button==1:
                         dragging=False
+                    if event.button==3:
+                        Game.mouseRightUp()
             elif event.type==pygame.MOUSEWHEEL:
                 bgEle=None
                 for bgElement in Game.imageLayer.bgImages:

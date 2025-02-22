@@ -1,6 +1,6 @@
 class SetParameter:
-    windowsWidth=600
-    windowsHeight=300
+    windowsWidth=800
+    windowsHeight=600
     colorBlack=(0,0,0)
     colorWhite=(255,255,255)
     colorRed=(255,0,0)
