@@ -1,6 +1,10 @@
-from enum import Enum,auto
+#from enum import Enum,auto
 
-class Role(Enum):
-    player=auto()
-    abi=auto()
+class Role():
+    player=0
+    abi=1
+
+
+
+
 

@@ -1,3 +1,6 @@
+'''
+
+
 import pygame
 from queue import  Queue
 from threading import Thread
@@ -78,3 +81,26 @@ while running:
     clock.tick(60)
 gameConsole.stop()
 pygame.quit()
+'''
+
+#testRect=pygame.Rect(100,100,100,100)
+
+'''
+data={"left": 505, "top": 330, "width": 30, "height": 30}
+readData={}
+with open(f"historyfile//test.json","w") as file:
+    json.dump(data,file)
+with open(f"historyfile//test.json","r") as file:
+    readData=json.load(file)
+testRect=pygame.Rect(readData["left"],readData["top"],readData["width"],readData["height"])
+print(testRect)
+'''
+
+import pygame
+import json
+from utility.role import  Role
+
+
+
+
+

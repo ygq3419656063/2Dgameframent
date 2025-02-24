@@ -14,7 +14,8 @@ from .gameConsole import GameConsole
 from .taskBar import TaskBar
 from .mouseLocation import MouseLocation
 from .dialogue import Dialogue
-
+import json
+from .gameObject import Gameobject
 class Game:
     board=None
     player=None
@@ -33,19 +34,27 @@ class Game:
     dialogue=None
     @classmethod
     def save(cls):
-        with open(f'historyfile//player.pkl',"wb") as file:
-            pickle.dump(cls.player.rect,file)
-        with open(f'historyfile//boardCellList.pkl',"wb") as file:
-            pickle.dump(cls.board.cellList,file)
+        #with open(f'historyfile//player.pkl',"wb") as file:
+            #pickle.dump(cls.player.rect,file)
+        with open(f'historyfile//player.json',"w") as file:
+            json.dump(cls.player.rectSerializeJson(),file)
+        #with open(f'historyfile//boardCellList.pkl',"wb") as file:
+            #pickle.dump(cls.board.cellList,file)
+        with open("historyfile//boardCellList.json","w") as file:
+            json.dump(cls.board.serialize(),file)
         with open(f'historyfile//bgElements.pkl',"wb") as file:
             pickle.dump(cls.imageLayer.bgImages,file)
 
     @classmethod
     def load(cls):
-        with open(f"historyfile//player.pkl", "rb") as file:
-            cls.player.rect=pickle.load(file)
-        with open(f"historyfile//boardCellList.pkl","rb") as file:
-            cls.board.cellList=pickle.load(file)
+        #with open(f"historyfile//player.pkl", "rb") as file:
+            #cls.player.rect=pickle.load(file)
+        with open (f"historyfile//player.json","r") as file:
+            cls.player.deserialize(json.load(file))
+        #with open(f"historyfile//boardCellList.pkl","rb") as file:
+            #cls.board.cellList=pickle.load(file)
+        with open("historyfile//boardCellList.json",'r') as file:
+            cls.board.deserialize(json.load(file))
         with open(f'historyfile//bgElements.pkl',"rb") as file:
             cls.imageLayer.bgImages=pickle.load(file)
 
@@ -179,6 +188,27 @@ class Cell:
         self.cellcontainer=None
         self.NPC=None
         self.npcRole=None
+
+    def serialize(self):
+        if self.NPC!=None:
+            self.npcRole=self.NPC.role
+        state=self.__dict__.copy()
+        if self.NPC!=None:
+            del state["NPC"]
+        if self.cellcontainer!=None:
+            state["cellcontainer"]=self.cellcontainer.serialize()
+        return state
+
+    @classmethod
+    def deserialize(cls,data):
+        cell=cls(data["x"],data["y"])
+        if data["npcRole"] !=None:
+            cell.npcRole=data["npcRole"]
+            cell.NPC=Game.npcs[cell.npcRole]
+        if data["cellcontainer"]!=None:
+            cell.cellcontainer=Gameobject.deserialize(data["cellcontainer"])
+        return cell
+
     def __getstate__(self):
         if self.NPC !=None:
             self.npcRole = self.NPC.role
@@ -206,6 +236,20 @@ class Board:
                 cell=Cell(i,j)
                 self.cellList[i][j]=cell
 
+    def serialize(self):
+        jsonvalue=[[None for j in range(len(self.cellList[0]))] for i in range(len(self.cellList))]
+        for i in range(len(self.cellList)):
+            for j in range(len(self.cellList[0])):
+                jsonvalue[i][j]=self.cellList[i][j].serialize()
+        return{
+            "cellList":jsonvalue
+        }
+
+    def deserialize(self,data):
+        jsonvalue=data["cellList"]
+        for i in range(len(self.cellList)):
+            for j in range(len(self.cellList[0])):
+                self.cellList[i][j]=Cell.deserialize(jsonvalue[i][j])
 
 
     def is_hover(self):
@@ -246,6 +290,17 @@ class Player(threading.Thread):
         self.role=Role.player
         self.relativeRect=pygame.Rect(self.rect.x-Game.crop_x,self.rect.y-Game.crop_y,30,30)
         self.hasMoved=False
+
+    def rectSerializeJson(self):
+        return {"left":self.rect.left,
+                "top":self.rect.top,
+                "width":self.rect.width,
+                "height":self.rect.height}
+
+    def deserialize(self,data):
+        self.rect=pygame.Rect(data["left"],data["top"],data["width"],data["height"])
+
+
 
 
     def run(self):

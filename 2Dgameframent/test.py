@@ -92,7 +92,7 @@ if __name__=="__main__":
 
         Game.isHover()
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(30)
     Game.stop()
     pygame.quit()
 

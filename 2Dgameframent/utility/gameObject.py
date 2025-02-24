@@ -9,6 +9,14 @@ class Gameobject:
     def draw(self,rect,screen):
         screen.blit(self.image,rect)
 
+    def serialize(self):
+        return{
+            "file":self.file
+        }
+    @classmethod
+    def deserialize(cls,data):
+        return cls(data["file"])
+
     def drawTaskCell(self,rect,screen):
         lessenRect=pygame.Rect(rect)
         lessenRect.x=rect.x+4
