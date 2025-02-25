@@ -1,3 +1,4 @@
+import os 
 class SetParameter:
     windowsWidth=800
     windowsHeight=600
@@ -7,3 +8,4 @@ class SetParameter:
     cellSize=30
     globalWindowWidth=1200
     globalWindowHeight=800
+

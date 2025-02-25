@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3be18aa-79d8-46ba-8145-4ff821c296a3" name="Changes" comment="简单对话框">
-      <change afterPath="$PROJECT_DIR$/historyfile/player.json" afterDir="false" />
+    <list default="true" id="b3be18aa-79d8-46ba-8145-4ff821c296a3" name="Changes" comment="json存档">
+      <change afterPath="$PROJECT_DIR$/historyfile/boardCellList.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/historyfile/test.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output_file" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/historyfile/boardCellList.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/historyfile/boardCellList.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smalltest.py" beforeDir="false" afterPath="$PROJECT_DIR$/smalltest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility/baseClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/baseClass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility/gameObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/gameObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility/role.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/role.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utility/imageLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility/imageLayer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740212447439</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="json存档">
+      <option name="closed" value="true" />
+      <created>1740382338703</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1740382338703</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,7 +177,8 @@
     <MESSAGE value="摄像头跟随" />
     <MESSAGE value="控制台" />
     <MESSAGE value="简单对话框" />
-    <option name="LAST_COMMIT_MESSAGE" value="简单对话框" />
+    <MESSAGE value="json存档" />
+    <option name="LAST_COMMIT_MESSAGE" value="json存档" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

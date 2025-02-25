@@ -7,10 +7,11 @@ class ImageLayer:
         self.Images=[]
         self.bgImages=[]
         self.dragElement=None
+        self.mapImage=pygame.image.load(f'picture//bg.jpg')
     def draw(self,Game):
-        bg=pygame.image.load(f'picture//bg.jpg')
+        #bg=pygame.image.load(f'picture//bg.jpg')
         bgrect = pygame.Rect((Game.crop_x, Game.crop_y), (SetParameter.windowsWidth, SetParameter.windowsHeight))
-        Game.screen.blit(bg,(0,0),bgrect)
+        Game.screen.blit(self.mapImage,(0,0),bgrect)
         for bgElement in self.bgImages:
             bgElement.draw()
 
